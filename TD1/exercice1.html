@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exercice 1</title>
+  </head>
+  <body>
+    <p>Votre position actuelle est :</p>
+    <p id="Latitude">Latitude :</p>
+    <p id="Longitude">Longitude :</p>
+    <p id="precision">La précision est de :</p>
+
+    <script>
+      var options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      };
+
+      const Latitude = document.querySelector("#Latitude");
+      const Longitude = document.querySelector("#Longitude");
+      const precision = document.querySelector("#precision");
+
+      function success(pos) {
+        var crd = pos.coords;
+
+        Latitude.textContent=(`Latitude : ${crd.latitude}`);
+        Longitude.textContent=(`Longitude : ${crd.longitude}`);
+        precision.textContent=(`La précision est de ${crd.accuracy} mètres.`);
+      }
+
+      function error(err) {
+        console.warn(`ERREUR (${err.code}): ${err.message}`);
+      }
+
+      navigator.geolocation.getCurrentPosition(success, error, options);
+    </script>
+  </body>
+</html>
