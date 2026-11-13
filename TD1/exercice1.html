@@ -6,13 +6,18 @@
     <title>Exercice 1</title>
   </head>
   <body>
-    <p>Votre position actuelle est :</p>
+    <h3>Votre position actuelle est :</h3>
     <p id="Latitude">Latitude :</p>
     <p id="Longitude">Longitude :</p>
     <p id="precision">La précision est de :</p>
 
+    <h3>Suivi de la position</h3>
+    <p id="watchLatitude">Latitude :</p>
+    <p id="watchLongitude">Longitude :</p>
+    <p id="watchPrecision">La précision est de :</p>
+
     <script>
-      var options = {
+      const positionOptions = {
         enableHighAccuracy: true,
         timeout: 5000,
         maximumAge: 0,
@@ -22,19 +27,53 @@
       const Longitude = document.querySelector("#Longitude");
       const precision = document.querySelector("#precision");
 
-      function success(pos) {
+      function currentPositionSuccess(pos) {
         var crd = pos.coords;
 
-        Latitude.textContent=(`Latitude : ${crd.latitude}`);
-        Longitude.textContent=(`Longitude : ${crd.longitude}`);
-        precision.textContent=(`La précision est de ${crd.accuracy} mètres.`);
+        Latitude.textContent = `Latitude : ${crd.latitude}`;
+        Longitude.textContent = `Longitude : ${crd.longitude}`;
+        precision.textContent = `La précision est de ${crd.accuracy} mètres.`;
       }
 
-      function error(err) {
+      function currentPositionError(err) {
         console.warn(`ERREUR (${err.code}): ${err.message}`);
       }
 
-      navigator.geolocation.getCurrentPosition(success, error, options);
+      navigator.geolocation.getCurrentPosition(
+        currentPositionSuccess,
+        currentPositionError,
+        positionOptions,
+      );
+    </script>
+
+    <script>
+      const watchLatitude = document.querySelector("#watchLatitude");
+      const watchLongitude = document.querySelector("#watchLongitude");
+      const watchPrecision = document.querySelector("#watchPrecision");
+
+      const watchOptions = {
+        enableHighAccuracy: false,
+        timeout: 5000,
+        maximumAge: 0,
+      };
+
+      function watchSuccess(pos) {
+        var crd = pos.coords;
+
+        watchLatitude.textContent = `Latitude : ${crd.latitude}`;
+        watchLongitude.textContent = `Longitude : ${crd.longitude}`;
+        watchPrecision.textContent = `La précision est de ${crd.accuracy} mètres.`;
+      }
+
+      function watchError(err) {
+        console.warn("ERROR(" + err.code + "): " + err.message);
+      }
+
+      const watchId = navigator.geolocation.watchPosition(
+        watchSuccess,
+        watchError,
+        watchOptions,
+      );
     </script>
   </body>
 </html>
